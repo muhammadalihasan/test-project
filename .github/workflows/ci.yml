@@ -26,5 +26,32 @@ jobs:
       - name: View artifact
         run: |
           cat file1.txt
- 
+
+      # First time it is a miss as it does not have any cache created yet
+      - name: Restore cache
+        id: restore-cache
+        uses: action/cache@v4
+        with:
+          path: mycache
+          key: mycachekey
+          
+      - name: Populate cached
+        if: steps.restore-cache.outputs.cache-hit != 'true'
+        run: |
+         echo "Cache was a miss"
+         echo "Generating cache"
+         mkdir mycache
+         echo "This is a cache input">>mycache/file.txt
+
+      # Save only if we generated newly  
+      - name: Cache the cache file
+        if: steps.restore-cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
+        with:
+         path: mycache
+         key: mycachekey
+         
+      - name: Vie cache
+        run: |
+         cat mycache/file.txt
 
