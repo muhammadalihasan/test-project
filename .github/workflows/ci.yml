@@ -30,7 +30,7 @@ jobs:
       # First time it is a miss as it does not have any cache created yet
       - name: Restore cache
         id: restore-cache
-        uses: action/cache@v4
+        uses: actions/cache@v4
         with:
           path: mycache
           key: mycachekey
